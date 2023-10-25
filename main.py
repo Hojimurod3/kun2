@@ -6,17 +6,17 @@ from bs4 import BeautifulSoup
 
 KUN_UZ_URL = "https://kun.uz/news/search?q="  # Replace with the actual URL
 TOKEN = "6460684839:AAHps-3sFzzDuDdb4SPiLfdvAjvri83zS7M"
-WORD = 0
+KEYWORD = 0
 
 
 def start(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
         "assalomu aleykum men kun.uz botman")
-    return WORD
+    return KEYWORD
 
 
 def search_articles(update: Update, context: CallbackContext):
-    word = update.message.text
+    keyword = update.message.text
     url = KUN_UZ_URL + keyword
     response = requests.get(url)
     if response.status_code == 200:
@@ -38,7 +38,7 @@ def main():
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            WORD: [MessageHandler(Filters.text & ~Filters.command, search_articles)],
+            KEYWORD: [MessageHandler(Filters.text & ~Filters.command, search_articles)],
         },
         fallbacks=[],
     )
