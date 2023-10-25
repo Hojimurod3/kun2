@@ -11,7 +11,7 @@ WORD = 0
 
 def start(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
-        "Welcome to Kun.uz Bot! Please enter a keyword to search for articles.")
+        "assalomu aleykum men kun.uz botman")
     return WORD
 
 
