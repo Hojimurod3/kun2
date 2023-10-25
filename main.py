@@ -5,28 +5,23 @@ import requests
 from bs4 import BeautifulSoup
 
 KUN_UZ_URL = "https://kun.uz/news/search?q="  # Replace with the actual URL
-
-
 TOKEN = "6460684839:AAHps-3sFzzDuDdb4SPiLfdvAjvri83zS7M"
-
-KEYWORD = 0
+WORD = 0
 
 
 def start(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
         "Welcome to Kun.uz Bot! Please enter a keyword to search for articles.")
-    return KEYWORD
+    return WORD
 
 
 def search_articles(update: Update, context: CallbackContext):
-    keyword = update.message.text
+    word = update.message.text
     url = KUN_UZ_URL + keyword
-
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         articles = soup.find_all('div', class_='news')
-
         for article in articles[:10]:
             title = article.find('a', class_="news__title").text
             link = article.find('a', class_='news__title')['href']
@@ -40,17 +35,14 @@ def search_articles(update: Update, context: CallbackContext):
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
-
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            KEYWORD: [MessageHandler(Filters.text & ~Filters.command, search_articles)],
+            WORD: [MessageHandler(Filters.text & ~Filters.command, search_articles)],
         },
         fallbacks=[],
     )
-
     dp.add_handler(conv_handler)
-
     updater.start_polling()
     updater.idle()
 
